@@ -13,7 +13,6 @@ class Card extends Component {
    handleClick(e){
       if (!this.props.flipped) {
          this.props.checkMatch(this.props.value,this.props.id);
-
       }
 
       }
@@ -21,8 +20,8 @@ class Card extends Component {
 
     render () {
       return(
-        <div className="column">
-           <p onClick={this.handleClick} className="bd-notification is-primary"  style={{backgroundColor: this.props.value}}>
+        <div onClick={this.handleClick} className="column">
+           <p className="bd-notification is-primary"  style={{backgroundColor: this.props.flipped ? this.props.value : '#00d1b2'}}>
            </p>
 
         </div>
