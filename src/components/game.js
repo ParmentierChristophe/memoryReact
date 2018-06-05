@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Card from './Card';
 
 
-function initialColors(){
-  return [{value:"#3B1F2B",flipped: false, matched: false},
+var colors=  [{value:"#3B1F2B",flipped: false,matched: false},
               {value:"#0081AF",flipped: false,matched: false},
               {value:"#DBDFAC",flipped: false,matched: false},
               {value:"#5F758E",flipped: false,matched: false},
@@ -16,8 +15,8 @@ function initialColors(){
               {value:"#5F758E",flipped: false,matched: false},
               {value:"#FAD955",flipped: false,matched: false},
               {value:"#6320EE",flipped: false,matched: false},
-              {value:"#FB3640",flipped: false,matched: false}];
-            }
+              {value:"#FB3640",flipped: false,matched: false}]
+
 
 
 class Game extends Component {
@@ -36,6 +35,9 @@ class Game extends Component {
    };
 
 
+
+
+
   arrayShuffle =  (items) =>{
        var currentIndex = items.length,
            temporaryValue, randomIndex;
@@ -47,13 +49,12 @@ class Game extends Component {
            items[currentIndex] = items[randomIndex];
            items[randomIndex] = temporaryValue;
        }
-
        return items
    };
 
   getCards = () => {
-       var playingCards = this.arrayShuffle(initialColors());
-       return playingCards
+       var playingCards = this.arrayShuffle(colors);
+       return  playingCards
    };
 
 
@@ -74,8 +75,9 @@ class Game extends Component {
   checkMatch = (value,id) => {
     var cards = this.state.cards;
     cards[id].flipped = true;
+
     if (this.state.lastCard) {
-      if (value === this.state.lastCard.value) {
+      if (value === this.state.lastCard.value && !this.state.lastCard.flipped) {
         cards[id].matched = true;
         cards[this.state.lastCard.id].matched = true;
         this.setState({lastCard: null});
@@ -84,13 +86,18 @@ class Game extends Component {
         setTimeout(() => {
           cards[id].flipped = false;
           cards[this.state.lastCard.id].flipped = false;
-          this.setState({lastCard: null});
+          this.setState({cards: this.state.cards,
+            lastCard: null});
+            console.log('lose');
+
         }, 1000);
       }
     } else {
       this.setState({
         lastCard: {id, value},
+
       });
+
     }
   }
 
@@ -109,6 +116,7 @@ class Game extends Component {
          row.push(<div key={i} className="columns is-tablet">{column}</div>);
       }
       return row
+
    }
 
 
@@ -124,7 +132,7 @@ class Game extends Component {
    <div className="container">
     <h1 className="title">{title}</h1>
 
-    {this.createBoard(this.renderCards(this.getCards()))}
+    {this.createBoard(this.renderCards(this.state.cards))}
 
    </div>
    );
